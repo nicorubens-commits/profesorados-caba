@@ -102,7 +102,7 @@ function details(p){
 }
 // Separar visualmente puntos exactamente coincidentes para que todos puedan seleccionarse.
 const seen={};
-places.forEach((p,i)=>{let lat=p[4],lon=p[5];const key=lat.toFixed(4)+','+lon.toFixed(4);const n=seen[key]||0;seen[key]=n+1;if(n>0){const angle=n*2.399;const radius=.00005*Math.ceil(n/2);lat+=Math.sin(angle)*radius;lon+=Math.cos(angle)*radius;}
+places.forEach((p,i)=>{let lat=p[4],lon=p[5];const key=lat.toFixed(4)+','+lon.toFixed(4);const n=seen[key]||0;seen[key]=n+1;if(n>0){const angle=n*2.399;const radius=.000015*Math.ceil(n/2);lat+=Math.sin(angle)*radius;lon+=Math.cos(angle)*radius;}
 const marker=L.circleMarker([lat,lon],{radius:9,color:'#ffffff',weight:2,fillColor:palette[p[0]],fillOpacity:1});marker.bindPopup(details(p),{maxWidth:300});marker.bindTooltip(p[1],{direction:'top',offset:[0,-6]});marker.addTo(groups[p[0]]);markers.push({p,marker});marker.on('click',()=>{document.getElementById('detail').innerHTML=details(p)});
 });
 function refresh(){const q=document.getElementById('search').value.trim().toLocaleLowerCase('es');let visible=0;markers.forEach(({p,marker})=>{const layerOn=document.getElementById(p[0]).checked;const matches=!q||(p[1]+' '+p[2]+' '+p[3]).toLocaleLowerCase('es').includes(q);const show=layerOn&&matches;const group=groups[p[0]];if(show){if(!group.hasLayer(marker))group.addLayer(marker);visible++;}else if(group.hasLayer(marker)){group.removeLayer(marker);}});document.getElementById('count').textContent=`${visible} de ${places.length} instituciones visibles`;}
