@@ -69,7 +69,7 @@ const places = [
 ];
 const palette={c1:'#277da1',c2:'#d97706',c3:'#7b61a8'};
 const map=L.map('map',{preferCanvas:true}).setView([-34.615,-58.435],11);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:20,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'}).addTo(map);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:20,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'}).addTo(map);
 const groups={c1:L.layerGroup().addTo(map),c2:L.layerGroup().addTo(map),c3:L.layerGroup().addTo(map)};
 const markers=[];
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
@@ -77,7 +77,7 @@ function details(p){return `<b>${esc(p[1])}</b><div>${esc(p[2])}</div><span clas
 // Separar visualmente puntos exactamente coincidentes para que todos puedan seleccionarse.
 const seen={};
 places.forEach((p,i)=>{let lat=p[4],lon=p[5];const key=lat.toFixed(4)+','+lon.toFixed(4);const n=seen[key]||0;seen[key]=n+1;if(n>0){const angle=n*2.399;const radius=.00022*Math.ceil(n/2);lat+=Math.sin(angle)*radius;lon+=Math.cos(angle)*radius;}
-const marker=L.circleMarker([lat,lon],{radius:7,color:'#fff',weight:1.5,fillColor:palette[p[0]],fillOpacity:.96});marker.bindPopup(details(p),{maxWidth:300});marker.bindTooltip(p[1],{direction:'top',offset:[0,-6]});marker.addTo(groups[p[0]]);markers.push({p,marker});marker.on('click',()=>{document.getElementById('detail').innerHTML=details(p)});
+const marker=L.circleMarker([lat,lon],{radius:9,color:'#ffffff',weight:2,fillColor:palette[p[0]],fillOpacity:1});marker.bindPopup(details(p),{maxWidth:300});marker.bindTooltip(p[1],{direction:'top',offset:[0,-6]});marker.addTo(groups[p[0]]);markers.push({p,marker});marker.on('click',()=>{document.getElementById('detail').innerHTML=details(p)});
 });
 function refresh(){const q=document.getElementById('search').value.trim().toLocaleLowerCase('es');let visible=0;markers.forEach(({p,marker})=>{const layerOn=document.getElementById(p[0]).checked;const matches=!q||(p[1]+' '+p[2]+' '+p[3]).toLocaleLowerCase('es').includes(q);const show=layerOn&&matches;const group=groups[p[0]];if(show){if(!group.hasLayer(marker))group.addLayer(marker);visible++;}else if(group.hasLayer(marker)){group.removeLayer(marker);}});document.getElementById('count').textContent=`${visible} de ${places.length} instituciones visibles`;}
 ['c1','c2','c3'].forEach(id=>document.getElementById(id).addEventListener('change',refresh));document.getElementById('search').addEventListener('input',refresh);refresh();
