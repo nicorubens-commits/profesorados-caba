@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Profesorados de CABA | Mapa interactivo</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<style>
+:root{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:#20252b;background:#f4f6f8}*{box-sizing:border-box}body{margin:0}header{background:#fff;padding:20px 24px;border-bottom:1px solid #dfe3e8}h1{font-size:clamp(1.35rem,2.5vw,1.9rem);margin:0 0 7px;letter-spacing:-.025em}.sub{margin:0;color:#586270;line-height:1.5;max-width:900px}.layout{display:grid;grid-template-columns:330px minmax(0,1fr);min-height:calc(100vh - 116px)}aside{padding:18px;background:#fff;border-right:1px solid #dfe3e8}.eyebrow{font-size:.76rem;font-weight:750;text-transform:uppercase;letter-spacing:.09em;color:#687385;margin:0 0 8px}.layer{display:flex;gap:10px;align-items:flex-start;padding:12px 10px;border:1px solid #e6e9ee;border-radius:10px;margin:9px 0;background:#fbfcfd;cursor:pointer}.layer input{margin-top:4px;accent-color:#263b53}.dot{width:13px;height:13px;border-radius:50%;flex-shrink:0;margin-top:3px}.blue{background:#277da1}.orange{background:#d97706}.purple{background:#7b61a8}.small{font-size:.83rem;color:#647080;line-height:1.45}.how{margin-top:18px;padding:12px;background:#f4f7fa;border-radius:10px;font-size:.88rem;line-height:1.5}.how p{margin:5px 0 0}.notice{margin-top:12px;padding:12px;background:#fff6df;border:1px solid #f0dfae;border-radius:10px;font-size:.82rem;line-height:1.45}.mapwrap{padding:14px;min-width:0;display:flex;flex-direction:column}.maphead{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:.83rem;color:#5d6673;padding:2px 3px 10px}.mapframe{flex:1;min-height:520px;border:1px solid #d8dde4;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px #1f29370d}#map{height:100%;min-height:520px;width:100%;background:#e9edf0}.detail{padding:12px;border:1px solid #e0e5eb;border-radius:10px;margin-top:14px;min-height:90px;line-height:1.45}.detail b{display:block;margin-bottom:4px}.pill{display:inline-block;font-size:.72rem;padding:3px 7px;border-radius:20px;background:#edf1f5;color:#4d5968;margin:4px 0 7px}.search{width:100%;padding:10px 11px;border:1px solid #d6dce4;border-radius:9px;font:inherit;margin:8px 0 4px}.count{font-size:.82rem;color:#687385;margin:10px 2px}.leaflet-popup-content{line-height:1.5}.leaflet-popup-content b{font-size:.96rem}.leaflet-container{font:14px/1.5 Inter,system-ui,sans-serif}footer{padding:14px 22px;color:#5f6875;background:#f4f6f8;font-size:.8rem;line-height:1.45}@media(max-width:780px){.layout{grid-template-columns:1fr}.mapwrap{padding:9px}.mapframe,#map{min-height:58vh}aside{border-right:0;border-bottom:1px solid #dfe3e8}header{padding:17px}}
+</style></head><body>
+<header><h1>¿Dónde se forman docentes en la Ciudad de Buenos Aires?</h1><p class="sub">Mapa interactivo para explorar instituciones de formación docente. Activá o desactivá las capas, buscá una institución y seleccioná un marcador para consultar su información.</p></header>
+<div class="layout"><aside><p class="eyebrow">Capas del mapa</p>
+<label class="layer"><input id="c1" type="checkbox" checked><span class="dot blue"></span><span><b>Inicial y Primaria</b><br><span class="small">Escuelas normales e institutos específicos</span></span></label>
+<label class="layer"><input id="c2" type="checkbox" checked><span class="dot orange"></span><span><b>Otros profesorados estatales</b><br><span class="small">Lenguas, disciplinas, Educación Física, especial y artes</span></span></label>
+<label class="layer"><input id="c3" type="checkbox" checked><span class="dot purple"></span><span><b>Universitarios</b><br><span class="small">Universidades e institutos universitarios</span></span></label>
+<input id="search" class="search" type="search" placeholder="Buscar institución…" aria-label="Buscar institución">
+<div id="count" class="count"></div>
+<div class="how"><b>Cómo usar el mapa</b><p>1. Activá una sola capa para comparar su distribución.<br>2. Buscá una institución por nombre.<br>3. Seleccioná un punto para consultar dirección y formación.</p></div>
+<div class="notice"><b>Importante:</b> recurso didáctico preliminar. Algunas direcciones, sedes y ofertas de carreras necesitan verificación. Las ubicaciones de los marcadores son orientativas; no usar como directorio oficial sin revisar los datos.</div>
+<div class="detail" id="detail"><span class="small">Seleccioná un marcador para ver la información de la institución.</span></div>
+</aside><main class="mapwrap"><div class="maphead"><span>Ciudad Autónoma de Buenos Aires</span><span>Cartografía © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a></span></div><div class="mapframe"><div id="map" role="application" aria-label="Mapa de profesorados de CABA"></div></div></main></div>
+<footer>Mapa basado en OpenStreetMap. Las capas son categorías orientativas, no una clasificación oficial. Antes de utilizarlo para decisiones de inscripción, confirmar la información con cada institución y las autoridades educativas correspondientes.</footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+[
+// Inicial / Primaria
+['c1','ENS N.º 1 «Presidente Roque Sáenz Peña»','Av. Córdoba 1951, Balvanera','Inicial y Primaria',-34.5998,-58.3990],
+['c1','ENS N.º 2 «Mariano Acosta»','Gral. Urquiza 277, Balvanera','Primaria',-34.6102,-58.4057],
+['c1','ENS N.º 3 «Bernardino Rivadavia»','Bolívar 1235, San Telmo','Inicial y Primaria',-34.6200,-58.3748],
+['c1','ENS N.º 3 — Anexo Villa Lugano','Saraza 4241, Villa Lugano','Inicial y Primaria',-34.6790,-58.4650],
+['c1','ENS N.º 4 «Estanislao S. Zeballos»','Av. Rivadavia 4950, Caballito','Inicial y Primaria',-34.6185,-58.4207],
+['c1','ENS N.º 5 «Gral. Martín Miguel de Güemes»','Barracas; dirección a verificar','Inicial y Primaria',-34.6415,-58.3780],
+['c1','ENS N.º 6 «Vicente López y Planes»','Güemes 3859, Palermo','Inicial',-34.5878,-58.4148],
+['c1','ENS N.º 7 «José María Torres»','Av. Corrientes 4261, Almagro','Inicial y Primaria',-34.6054,-58.4208],
+['c1','ENS N.º 8 «Presidente Julio A. Roca»','La Rioja 1042, San Cristóbal','Inicial y Primaria',-34.6230,-58.4075],
+['c1','ENS N.º 9 «Domingo F. Sarmiento»','Av. Callao 450, Balvanera','Inicial y Primaria',-34.6045,-58.3925],
+['c1','ENS N.º 10 «Juan Bautista Alberdi»','O’Higgins 2441, Belgrano','Inicial y Primaria',-34.5585,-58.4560],
+['c1','ENS N.º 11 «Dr. Ricardo Levene»','Deán Funes 1821, Parque Patricios','Inicial y Primaria',-34.6370,-58.4050],
+['c1','ISPEI «Sara C. de Eccleston»','Av. Dorrego 3751, Palermo','Inicial',-34.5740,-58.4260],
+['c1','IES «Juan B. Justo»','Lascano 3840, Villa del Parque','Inicial y Primaria',-34.6020,-58.4930],
+// Otros no universitarios
+['c2','IES N.º 1 «Dra. Alicia Moreau de Justo»','Av. Córdoba 2016, Balvanera','Profesorados disciplinares; verificar oferta vigente',-34.6005,-58.4002],
+['c2','IES N.º 2 «Mariano Acosta»','Gral. Urquiza 277, Balvanera','Matemática y Física; verificar oferta vigente',-34.6102,-58.4057],
+['c2','ISP «Dr. Joaquín V. González»','Ayacucho 632, Balvanera','Profesorados disciplinares y de lenguas',-34.5995,-58.3970],
+['c2','IES en Lenguas Vivas «Juan Ramón Fernández»','Carlos Pellegrini 1515, Retiro','Lenguas extranjeras',-34.5935,-58.3845],
+['c2','ENS en Lenguas Vivas «Sofía Broquen de Spangenberg»','Juncal 3251, Palermo','Lenguas extranjeras',-34.5880,-58.4050],
+['c2','ISPEE','Holmberg 2754, Villa Urquiza','Educación Especial; verificar sede y títulos',-34.5700,-58.4850],
+['c2','ISEF N.º 1 «Dr. Enrique Romero Brest»','Núñez; verificar dirección exacta','Educación Física',-34.5480,-58.4560],
+['c2','ISEF N.º 2 «Federico W. Dickens»','Av. Curapaligüe 1150, Parque Chacabuco','Educación Física',-34.6350,-58.4450],
+['c2','ESEA «Lola Mora»','Av. Soldado de la Frontera 5155, Villa Lugano','Artes Visuales; confirmar título docente',-34.6810,-58.4650],
+['c2','ESEA «Manuel Belgrano»','Wenceslao Villafañe 1342, Barracas','Artes Visuales',-34.6340,-58.3730],
+['c2','ESEA «Rogelio Yrurtia»','Av. Juan Bautista Alberdi 4139, Vélez Sarsfield','Artes Visuales',-34.6400,-58.4970],
+['c2','ESEA «Fernando Arranz»','Magariños Cervantes 5068, Villa General Mitre','Formación artística; profesorado no confirmado',-34.6080,-58.4820],
+['c2','ESEA en Danza «Aída Victoria Mastrazzi»','Esmeralda 285, San Nicolás','Danza; verificar títulos vigentes',-34.6030,-58.3790],
+['c2','ESEA en Danza N.º 1 «Prof. Nelly Ramicone»','Fonrouge 711, Liniers','Danza; verificar títulos vigentes',-34.6440,-58.5200],
+['c2','ESEA en Danza N.º 2 «Jorge Donn»','Murature 5095, Vélez Sarsfield','Danza; verificar títulos vigentes',-34.6400,-58.4960],
+['c2','ESEA en Música «Juan Pedro Esnaola»','Av. Crisólogo Larralde 5085, Saavedra','Música; verificar títulos vigentes',-34.5540,-58.4860],
+['c2','EMAD','Sarmiento 2573, Balvanera','Teatro; verificar título docente vigente',-34.6030,-58.4000],
+// Universitarios
+['c3','UBA — Facultad de Agronomía','Av. San Martín 4453, Agronomía','Formación docente vinculada con Ciencias Ambientales; verificar título',-34.5890,-58.4890],
+['c3','UBA — Facultad de Ciencias Exactas y Naturales','Ciudad Universitaria, Pabellón II, Núñez','Profesorados de ciencias y disciplinas afines',-34.5430,-58.4380],
+['c3','UBA — Facultad de Ciencias Sociales','Santiago del Estero 1029, Constitución','Profesorados vinculados con ciencias sociales; verificar títulos',-34.6220,-58.3830],
+['c3','UBA — Facultad de Derecho','Av. Figueroa Alcorta 2263, Recoleta','Enseñanza Media y Superior en Ciencias Jurídicas',-34.5830,-58.3910],
+['c3','UBA — Facultad de Filosofía y Letras','Puán 480, Caballito','Profesorados de varias disciplinas de humanidades y educación',-34.6200,-58.4370],
+['c3','UBA — Facultad de Psicología','Independencia 3065, Balvanera','Enseñanza Media y Superior en Psicología',-34.6090,-58.4030],
+['c3','UNA — Formación Docente','Bolívar 1674, San Telmo','Formación docente artística; verificar unidad académica',-34.6260,-58.3730],
+['c3','UNA — Artes Dramáticas','French 3614, Palermo','Formación docente en Teatro; verificar plan vigente',-34.5830,-58.4110],
+['c3','UNA — Artes del Movimiento','Sánchez de Loria 443, Almagro','Danza y Expresión Corporal; verificar títulos',-34.6100,-58.4180],
+['c3','UNA — Artes Musicales y Sonoras','Av. Córdoba 2445, Balvanera','Formación docente en Artes Musicales; verificar orientaciones',-34.6020,-58.4050],
+['c3','UNIPE — Sede Metropolitana','Piedras 1080, San Telmo','Letras, Historia, Filosofía e Informática; verificar oferta y sede',-34.6170,-58.3790],
+['c3','INSPT — UTN','Av. Triunvirato 3174, Villa Ortúzar','Disciplinas Industriales, Inglés y Matemática Aplicada',-34.5780,-58.4770]
+];
+const palette={c1:'#277da1',c2:'#d97706',c3:'#7b61a8'};
+const map=L.map('map',{preferCanvas:true}).setView([-34.615,-58.435],11);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'}).addTo(map);
+const groups={c1:L.layerGroup().addTo(map),c2:L.layerGroup().addTo(map),c3:L.layerGroup().addTo(map)};
+const markers=[];
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function details(p){return `<b>${esc(p[1])}</b><div>${esc(p[2])}</div><span class="pill">${p[0]==='c1'?'Inicial y Primaria':p[0]==='c2'?'Otros profesorados estatales':'Universitarios'}</span><div><b>Formación</b>${esc(p[3])}</div><div class="small" style="margin-top:7px">Ubicación aproximada; oferta y sede pendientes de verificación cuando se indica.</div>`}
+// Separar visualmente puntos exactamente coincidentes para que todos puedan seleccionarse.
+const seen={};
+places.forEach((p,i)=>{let lat=p[4],lon=p[5];const key=lat.toFixed(4)+','+lon.toFixed(4);const n=seen[key]||0;seen[key]=n+1;if(n>0){const angle=n*2.399;const radius=.00022*Math.ceil(n/2);lat+=Math.sin(angle)*radius;lon+=Math.cos(angle)*radius;}
+const marker=L.circleMarker([lat,lon],{radius:7,color:'#fff',weight:1.5,fillColor:palette[p[0]],fillOpacity:.96});marker.bindPopup(details(p),{maxWidth:300});marker.bindTooltip(p[1],{direction:'top',offset:[0,-6]});marker.addTo(groups[p[0]]);markers.push({p,marker});marker.on('click',()=>{document.getElementById('detail').innerHTML=details(p)});
+});
+function refresh(){const q=document.getElementById('search').value.trim().toLocaleLowerCase('es');let visible=0;markers.forEach(({p,marker})=>{const layerOn=document.getElementById(p[0]).checked;const matches=!q||(p[1]+' '+p[2]+' '+p[3]).toLocaleLowerCase('es').includes(q);const show=layerOn&&matches;const group=groups[p[0]];if(show){if(!group.hasLayer(marker))group.addLayer(marker);visible++;}else if(group.hasLayer(marker)){group.removeLayer(marker);}});document.getElementById('count').textContent=`${visible} de ${places.length} instituciones visibles`;}
+['c1','c2','c3'].forEach(id=>document.getElementById(id).addEventListener('change',refresh));document.getElementById('search').addEventListener('input',refresh);refresh();
+if(!window.L){document.getElementById('map').innerHTML='<div style="padding:20px">No se pudo cargar la biblioteca del mapa. Revisá la conexión a internet o las restricciones del navegador.</div>';}
+</script></body></html>
