@@ -80,14 +80,14 @@ const teacherOffers = {
 'ENS N.º 3 — Anexo Villa Lugano': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens3a-caba.infd.edu.ar/sitio/'},
 'ENS N.º 4 «Estanislao S. Zeballos»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens4-caba.infd.edu.ar/sitio/'},
 'ENS N.º 5 «Gral. Martín Miguel de Güemes»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens5-caba.infd.edu.ar/sitio/'},
-'ENS N.º 6 «Vicente López y Planes»': {careers:['Profesorado de Educación Inicial'],url:'https://ens6-caba.infd.edu.ar/sitio/'},
+'ENS N.º 6 «Vicente López y Planes»': {careers:['Profesorado de Educación Inicial','Ciclo de Formación Pedagógica para Profesionales y Técnicos Superiores','Tecnicatura Superior en Gastronomía','Tecnicatura Superior en Producción de Indumentaria'],url:'https://ens6-caba.infd.edu.ar/sitio/'},
 'ENS N.º 7 «José María Torres»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens7-caba.infd.edu.ar/sitio/'},
 'ENS N.º 8 «Presidente Julio A. Roca»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens8-caba.infd.edu.ar/sitio/'},
 'ENS N.º 9 «Domingo F. Sarmiento»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens9-caba.infd.edu.ar/sitio/'},
 'ENS N.º 10 «Juan Bautista Alberdi»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens10-caba.infd.edu.ar/sitio/'},
 'ENS N.º 11 «Dr. Ricardo Levene»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens11-caba.infd.edu.ar/sitio/'},
 'ISPEI «Sara C. de Eccleston»': {careers:['Profesorado de Educación Inicial'],url:'https://ieseccleston-caba.infd.edu.ar/sitio/'},
-'IES «Juan B. Justo»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'http://juanbjusto.buenosaires.edu.ar/'}
+'IES «Juan B. Justo»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria','Ciclo de Formación Pedagógica para Profesionales y Técnicos Superiores'],url:'https://juanbjusto.buenosaires.edu.ar/'}
 };
 const officialInitial='https://buenosaires.gob.ar/gcaba_historico/profesorados-y-formacion-en-educacion/profesorado-de-educacion-inicial';
 const officialPrimary='https://buenosaires.gob.ar/gcaba_historico/profesorados-y-formacion-en-educacion/profesorado-de-educacion-primaria';
@@ -96,7 +96,7 @@ function details(p){
  const offer=p[0]==='c1'?teacherOffers[p[1]]:null;
  if(offer){
   const careerList=offer.careers.map(c=>`<li style="margin:4px 0">${esc(c)}</li>`).join('');
-  return base+`<div style="margin-top:9px"><b>Oferta de formación docente</b><ul style="padding-left:19px;margin:5px 0">${careerList}</ul><div class="small">Oferta identificada en los listados oficiales del GCBA. Confirmá turnos, inscripción y vigencia en la institución.</div><div style="margin-top:9px;display:flex;flex-direction:column;gap:5px"><a href="${offer.url}" target="_blank" rel="noopener">Sitio de la institución ↗</a><a href="${officialInitial}" target="_blank" rel="noopener">Oferta oficial: Educación Inicial ↗</a><a href="${officialPrimary}" target="_blank" rel="noopener">Oferta oficial: Educación Primaria ↗</a></div></div>`;
+  return base+`<div style="margin-top:9px"><b>Oferta de nivel superior</b><ul style="padding-left:19px;margin:5px 0">${careerList}</ul><div class="small">Oferta identificada en los listados oficiales del GCBA. Confirmá turnos, inscripción y vigencia en la institución.</div><div style="margin-top:9px;display:flex;flex-direction:column;gap:5px"><a href="${offer.url}" target="_blank" rel="noopener">Sitio de la institución ↗</a><a href="${officialInitial}" target="_blank" rel="noopener">Oferta oficial: Educación Inicial ↗</a><a href="${officialPrimary}" target="_blank" rel="noopener">Oferta oficial: Educación Primaria ↗</a></div></div>`;
  }
  return base+`<div style="margin-top:7px"><b>Formación</b>${esc(p[3])}</div><div class="small" style="margin-top:7px">Ubicación aproximada; oferta y sede pendientes de verificación cuando se indica.</div>`;
 }
