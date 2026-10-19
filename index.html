@@ -26,7 +26,7 @@ const places = [
 ['c1','ENS N.º 3 «Bernardino Rivadavia»','Bolívar 1235, San Telmo','Inicial y Primaria',-34.6200,-58.3748],
 ['c1','ENS N.º 3 — Anexo Villa Lugano','Saraza 4241, Villa Lugano','Inicial y Primaria',-34.6790,-58.4650],
 ['c1','ENS N.º 4 «Estanislao S. Zeballos»','Av. Rivadavia 4950, Caballito','Inicial y Primaria',-34.6185,-58.4207],
-['c1','ENS N.º 5 «Gral. Martín Miguel de Güemes»','Barracas; dirección a verificar','Inicial y Primaria',-34.6415,-58.3780],
+['c1','ENS N.º 5 «Gral. Martín Miguel de Güemes»','Coronel Rico 751, Barracas','Inicial y Primaria',-34.6415,-58.3780],
 ['c1','ENS N.º 6 «Vicente López y Planes»','Güemes 3859, Palermo','Inicial',-34.5878,-58.4148],
 ['c1','ENS N.º 7 «José María Torres»','Av. Corrientes 4261, Almagro','Inicial y Primaria',-34.6054,-58.4208],
 ['c1','ENS N.º 8 «Presidente Julio A. Roca»','La Rioja 1042, San Cristóbal','Inicial y Primaria',-34.6230,-58.4075],
@@ -73,7 +73,33 @@ L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_L
 const groups={c1:L.layerGroup().addTo(map),c2:L.layerGroup().addTo(map),c3:L.layerGroup().addTo(map)};
 const markers=[];
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function details(p){return `<b>${esc(p[1])}</b><div>${esc(p[2])}</div><span class="pill">${p[0]==='c1'?'Inicial y Primaria':p[0]==='c2'?'Otros profesorados estatales':'Universitarios'}</span><div><b>Formación</b>${esc(p[3])}</div><div class="small" style="margin-top:7px">Ubicación aproximada; oferta y sede pendientes de verificación cuando se indica.</div>`}
+const teacherOffers = {
+'ENS N.º 1 «Presidente Roque Sáenz Peña»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens1-caba.infd.edu.ar/sitio/nivel-terciario/'},
+'ENS N.º 2 «Mariano Acosta»': {careers:['Profesorado de Educación Primaria'],url:'https://ens2-caba.infd.edu.ar/sitio/'},
+'ENS N.º 3 «Bernardino Rivadavia»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens3-caba.infd.edu.ar/sitio/'},
+'ENS N.º 3 — Anexo Villa Lugano': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens3a-caba.infd.edu.ar/sitio/'},
+'ENS N.º 4 «Estanislao S. Zeballos»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens4-caba.infd.edu.ar/sitio/'},
+'ENS N.º 5 «Gral. Martín Miguel de Güemes»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens5-caba.infd.edu.ar/sitio/'},
+'ENS N.º 6 «Vicente López y Planes»': {careers:['Profesorado de Educación Inicial'],url:'https://ens6-caba.infd.edu.ar/sitio/'},
+'ENS N.º 7 «José María Torres»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens7-caba.infd.edu.ar/sitio/'},
+'ENS N.º 8 «Presidente Julio A. Roca»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens8-caba.infd.edu.ar/sitio/'},
+'ENS N.º 9 «Domingo F. Sarmiento»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens9-caba.infd.edu.ar/sitio/'},
+'ENS N.º 10 «Juan Bautista Alberdi»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens10-caba.infd.edu.ar/sitio/'},
+'ENS N.º 11 «Dr. Ricardo Levene»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens11-caba.infd.edu.ar/sitio/'},
+'ISPEI «Sara C. de Eccleston»': {careers:['Profesorado de Educación Inicial'],url:'https://ieseccleston-caba.infd.edu.ar/sitio/'},
+'IES «Juan B. Justo»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'http://juanbjusto.buenosaires.edu.ar/'}
+};
+const officialInitial='https://buenosaires.gob.ar/gcaba_historico/profesorados-y-formacion-en-educacion/profesorado-de-educacion-inicial';
+const officialPrimary='https://buenosaires.gob.ar/gcaba_historico/profesorados-y-formacion-en-educacion/profesorado-de-educacion-primaria';
+function details(p){
+ const base=`<b>${esc(p[1])}</b><div>${esc(p[2])}</div><span class="pill">${p[0]==='c1'?'Inicial y Primaria':p[0]==='c2'?'Otros profesorados estatales':'Universitarios'}</span>`;
+ const offer=p[0]==='c1'?teacherOffers[p[1]]:null;
+ if(offer){
+  const careerList=offer.careers.map(c=>`<li style="margin:4px 0">${esc(c)}</li>`).join('');
+  return base+`<div style="margin-top:9px"><b>Oferta de formación docente</b><ul style="padding-left:19px;margin:5px 0">${careerList}</ul><div class="small">Oferta identificada en los listados oficiales del GCBA. Confirmá turnos, inscripción y vigencia en la institución.</div><div style="margin-top:9px;display:flex;flex-direction:column;gap:5px"><a href="${offer.url}" target="_blank" rel="noopener">Sitio de la institución ↗</a><a href="${officialInitial}" target="_blank" rel="noopener">Oferta oficial: Educación Inicial ↗</a><a href="${officialPrimary}" target="_blank" rel="noopener">Oferta oficial: Educación Primaria ↗</a></div></div>`;
+ }
+ return base+`<div style="margin-top:7px"><b>Formación</b>${esc(p[3])}</div><div class="small" style="margin-top:7px">Ubicación aproximada; oferta y sede pendientes de verificación cuando se indica.</div>`;
+}
 // Separar visualmente puntos exactamente coincidentes para que todos puedan seleccionarse.
 const seen={};
 places.forEach((p,i)=>{let lat=p[4],lon=p[5];const key=lat.toFixed(4)+','+lon.toFixed(4);const n=seen[key]||0;seen[key]=n+1;if(n>0){const angle=n*2.399;const radius=.00022*Math.ceil(n/2);lat+=Math.sin(angle)*radius;lon+=Math.cos(angle)*radius;}
