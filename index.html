@@ -27,14 +27,14 @@ const places = [
 ['c1','ENS N.º 3 — Anexo Villa Lugano','Saraza 4241, Villa Lugano','Inicial y Primaria',-34.6675557,-58.4756321],
 ['c1','ENS N.º 4 «Estanislao S. Zeballos»','Av. Rivadavia 4950, Caballito','Inicial y Primaria',-34.6180469481465,-58.4352970185331],
 ['c1','ENS N.º 5 «Gral. Martín Miguel de Güemes»','Arcamendia 793 (GCBA); también figura acceso por Coronel Rico 751','Inicial y Primaria',-34.6409831352245,-58.3801684287926],
-['c1','ENS N.º 6 «Vicente López y Planes»','Güemes 3859','Inicial',-34.587036,-58.416036],
+['c1','ENS N.º 6 «Vicente López y Planes»','Güemes 3859','Inicial y Formación Pedagógica para Profesionales',-34.587036,-58.416036],
 ['c1','ENS N.º 7 «José María Torres»','Av. Corrientes 4261','Inicial y Primaria',-34.6026878,-58.4250384],
 ['c1','ENS N.º 8 «Presidente Julio A. Roca»','La Rioja 1042','Inicial y Primaria',-34.6230,-58.4075],
 ['c1','ENS N.º 9 «Domingo F. Sarmiento»','Av. Callao 450','Inicial y Primaria',-34.603777,-58.39262],
 ['c1','ENS N.º 10 «Juan Bautista Alberdi»','O’Higgins 2441','Inicial y Primaria',-34.556667,-58.4554519],
 ['c1','ENS N.º 11 «Dr. Ricardo Levene»','Deán Funes 1821','Inicial y Primaria',-34.6363,-58.4039],
 ['c1','ISPEI «Sara C. de Eccleston»','Av. Dorrego 3751 (GCBA también publica Dorrego 3781)','Inicial',-34.5740,-58.4260],
-['c1','IES «Juan B. Justo»','Lascano 3840','Inicial y Primaria',-34.6129038,-58.4959717],
+['c1','IES «Juan B. Justo»','Lascano 3840','Inicial, Primaria y Formación Pedagógica para Profesionales',-34.6129038,-58.4959717],
 // Otros no universitarios
 ['c2','IES N.º 1 «Dra. Alicia Moreau de Justo»','Av. Córdoba 2016','Profesorados disciplinares; verificar oferta vigente',-34.6005,-58.4002],
 ['c2','IES N.º 2 «Mariano Acosta»','Gral. Urquiza 277','Matemática y Física; verificar oferta vigente',-34.6137037,-58.4100467],
@@ -74,20 +74,20 @@ const groups={c1:L.layerGroup().addTo(map),c2:L.layerGroup().addTo(map),c3:L.lay
 const markers=[];
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 const teacherOffers = {
-'ENS N.º 1 «Presidente Roque Sáenz Peña»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens1-caba.infd.edu.ar/sitio/nivel-terciario/'},
-'ENS N.º 2 «Mariano Acosta»': {careers:['Profesorado de Educación Primaria'],url:'https://ens2-caba.infd.edu.ar/sitio/'},
+'ENS N.º 1 «Presidente Roque Sáenz Peña»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens1-caba.infd.edu.ar/sitio/inscripcion/'},
+'ENS N.º 2 «Mariano Acosta»': {careers:['Profesorado de Educación Primaria'],url:'https://ens2-caba.infd.edu.ar/sitio/nivel-terciario/'},
 'ENS N.º 3 «Bernardino Rivadavia»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens3-caba.infd.edu.ar/sitio/'},
-'ENS N.º 3 — Anexo Villa Lugano': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens3a-caba.infd.edu.ar/sitio/'},
-'ENS N.º 4 «Estanislao S. Zeballos»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens4-caba.infd.edu.ar/sitio/'},
-'ENS N.º 5 «Gral. Martín Miguel de Güemes»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens5-caba.infd.edu.ar/sitio/'},
-'ENS N.º 6 «Vicente López y Planes»': {careers:['Profesorado de Educación Inicial','Ciclo de Formación Pedagógica para Profesionales y Técnicos Superiores','Tecnicatura Superior en Gastronomía','Tecnicatura Superior en Producción de Indumentaria'],url:'https://ens6-caba.infd.edu.ar/sitio/'},
-'ENS N.º 7 «José María Torres»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens7-caba.infd.edu.ar/sitio/'},
-'ENS N.º 8 «Presidente Julio A. Roca»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens8-caba.infd.edu.ar/sitio/'},
-'ENS N.º 9 «Domingo F. Sarmiento»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens9-caba.infd.edu.ar/sitio/'},
-'ENS N.º 10 «Juan Bautista Alberdi»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens10-caba.infd.edu.ar/sitio/'},
+'ENS N.º 3 — Anexo Villa Lugano': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens3-caba.infd.edu.ar/sitio/'},
+'ENS N.º 4 «Estanislao S. Zeballos»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens4-caba.infd.edu.ar/sitio/ingresantes/'},
+'ENS N.º 5 «Gral. Martín Miguel de Güemes»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens5-caba.infd.edu.ar/sitio/profesorados-inicial-y-primaria/'},
+'ENS N.º 6 «Vicente López y Planes»': {careers:['Profesorado de Educación Inicial','Certificación de Formación Pedagógica para Profesionales y Técnicos Superiores'],url:'https://ens6-caba.infd.edu.ar/sitio/'},
+'ENS N.º 7 «José María Torres»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens7-caba.infd.edu.ar/sitio/ingresantes/'},
+'ENS N.º 8 «Presidente Julio A. Roca»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens8-caba.infd.edu.ar/sitio/profesorados/'},
+'ENS N.º 9 «Domingo F. Sarmiento»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens9-caba.infd.edu.ar/sitio/plan-de-estudios-2015-en-adelante/'},
+'ENS N.º 10 «Juan Bautista Alberdi»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens10-caba.infd.edu.ar/sitio/nivel-terciario/'},
 'ENS N.º 11 «Dr. Ricardo Levene»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria'],url:'https://ens11-caba.infd.edu.ar/sitio/'},
-'ISPEI «Sara C. de Eccleston»': {careers:['Profesorado de Educación Inicial'],url:'https://ieseccleston-caba.infd.edu.ar/sitio/'},
-'IES «Juan B. Justo»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria','Ciclo de Formación Pedagógica para Profesionales y Técnicos Superiores'],url:'https://juanbjusto.buenosaires.edu.ar/'}
+'ISPEI «Sara C. de Eccleston»': {careers:['Profesorado de Educación Inicial'],url:'https://ieseccleston-caba.infd.edu.ar/sitio/plan-de-estudio-2026-en-adelante/'},
+'IES «Juan B. Justo»': {careers:['Profesorado de Educación Inicial','Profesorado de Educación Primaria','Ciclo de Formación Pedagógica para Profesionales y Técnicos Superiores'],url:'https://jbjusto-caba.infd.edu.ar/sitio/nivel-terciario/'}
 };
 const officialInitial='https://buenosaires.gob.ar/gcaba_historico/profesorados-y-formacion-en-educacion/profesorado-de-educacion-inicial';
 const officialPrimary='https://buenosaires.gob.ar/gcaba_historico/profesorados-y-formacion-en-educacion/profesorado-de-educacion-primaria';
