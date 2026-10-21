@@ -108,17 +108,33 @@ const specialistOffers = {
 "ESEA en Música «Juan Pedro Esnaola»": {careers:["Profesorado de Música con orientaciones en Educación Musical, Canto e instrumentos (17 orientaciones)"],site:"https://esnaola-caba.infd.edu.ar/sitio/",source:"https://buenosaires.gob.ar/gcaba_historico/profesorados-de-educacion-artistica/profesorado-de-musica"},
 "EMAD": {careers:["Formación en teatro: verificar si la oferta actual incluye título docente"],source:"https://buenosaires.gob.ar/gcaba_historico/educacion/estudiantes/sistema-educativo/profesorados-y-formacion-en-educacion"},
 };
+const universityOffers = {
+"UBA — Facultad de Agronomía":{site:"https://www.agro.uba.ar/",source:"https://www.agro.uba.ar/academica/carreras",careers:["Formación docente: consultar oferta y requisitos vigentes de la facultad"]},
+"UBA — Facultad de Ciencias Exactas y Naturales":{site:"https://exactas.uba.ar/",source:"https://exactas.uba.ar/ensenanza/carreras-de-grado/",careers:["Profesorados en ciencias exactas y naturales: consultar especialidades y planes vigentes"]},
+"UBA — Facultad de Ciencias Sociales":{site:"https://www.sociales.uba.ar/",source:"https://www.sociales.uba.ar/",careers:["Formación docente en Ciencias Sociales: verificar carreras y requisitos de ingreso"]},
+"UBA — Facultad de Derecho":{site:"https://www.derecho.uba.ar/",source:"https://www.derecho.uba.ar/academica/carreras_grado/profesorado.php",careers:["Profesorado para la Enseñanza Media y Superior en Ciencias Jurídicas"]},
+"UBA — Facultad de Filosofía y Letras":{site:"https://www.filo.uba.ar/",source:"https://www.filo.uba.ar/",careers:["Profesorados universitarios en disciplinas de Humanidades: consultar especialidades"]},
+"UBA — Facultad de Psicología":{site:"https://www.psi.uba.ar/",source:"https://www.psi.uba.ar/",careers:["Profesorado de Enseñanza Media y Superior en Psicología"]},
+"UNA — Formación Docente":{site:"https://una.edu.ar/",source:"https://una.edu.ar/",careers:["Formación docente artística: verificar unidad académica y titulaciones"]},
+"UNA — Artes Dramáticas":{site:"https://dramaticas.una.edu.ar/",source:"https://dramaticas.una.edu.ar/",careers:["Profesorado de Artes en Teatro: verificar plan vigente"]},
+"UNA — Artes del Movimiento":{site:"https://movimiento.una.edu.ar/",source:"https://movimiento.una.edu.ar/",careers:["Profesorados vinculados con Danza y Expresión Corporal: verificar denominaciones"]},
+"UNA — Artes Musicales y Sonoras":{site:"https://musicalesysonoras.una.edu.ar/",source:"https://musicalesysonoras.una.edu.ar/",careers:["Profesorados de Artes Musicales: consultar orientaciones y planes"]},
+"UNIPE — Sede Metropolitana":{site:"https://unipe.edu.ar/",source:"https://unipe.edu.ar/carreras/oferta-academica",careers:["Profesorado de Educación Secundaria y Superior en Letras","Profesorado de Educación Secundaria y Superior en Historia","Profesorado de Educación Secundaria y Superior en Filosofía","Profesorado en Informática"]},
+"INSPT — UTN":{site:"https://inspt.utn.edu.ar/",source:"https://inspt.utn.edu.ar/inscripcion-a-carreras/",careers:["Profesorado en Disciplinas Industriales (ciclo de formación docente)","Profesorado de Inglés e Inglés Técnico","Profesorado de Matemática y Matemática Aplicada"]},
+};
 const officialInitial='https://buenosaires.gob.ar/gcaba_historico/profesorados-y-formacion-en-educacion/profesorado-de-educacion-inicial';
 const officialPrimary='https://buenosaires.gob.ar/gcaba_historico/profesorados-y-formacion-en-educacion/profesorado-de-educacion-primaria';
 function details(p){
  const base=`<b>${esc(p[1])}</b><div>${esc(p[2])}</div><span class="pill">${p[0]==='c1'?'Inicial y Primaria':p[0]==='c2'?'Otros profesorados estatales':'Universitarios'}</span>`;
  const offer=p[0]==='c1'?teacherOffers[p[1]]:null;
  const specialist=p[0]==='c2'?specialistOffers[p[1]]:null;
+ const university=p[0]==='c3'?universityOffers[p[1]]:null;
  if(offer){
   const careerList=offer.careers.map(c=>`<li style="margin:4px 0">${esc(c)}</li>`).join('');
   return base+`<div style="margin-top:9px"><b>Oferta de nivel superior</b><ul style="padding-left:19px;margin:5px 0">${careerList}</ul><div class="small">Oferta identificada en los listados oficiales del GCBA. Confirmá turnos, inscripción y vigencia en la institución.</div><div style="margin-top:9px;display:flex;flex-direction:column;gap:5px"><a href="${new URL("/sitio/",offer.url).href}" target="_blank" rel="noopener">Web oficial de la institución ↗</a><a href="${offer.url}" target="_blank" rel="noopener">Carreras, ingreso o plan de estudios ↗</a>${offer.careers.some(c=>c.includes("Educación Inicial"))?`<a href="${officialInitial}" target="_blank" rel="noopener">Oferta GCBA: Educación Inicial ↗</a>`:""}${offer.careers.some(c=>c.includes("Educación Primaria"))?`<a href="${officialPrimary}" target="_blank" rel="noopener">Oferta GCBA: Educación Primaria ↗</a>`:""}</div></div>`;
  }
  if(specialist){const items=specialist.careers.map(x=>`<li style="margin:4px 0">${esc(x)}</li>`).join('');return base+`<div style="margin-top:9px"><b>Oferta y orientaciones</b><ul style="padding-left:19px;margin:5px 0">${items}</ul><div class="small">Consultar oferta, planes y condiciones de ingreso vigentes. Las carreras no confirmadas se indican expresamente.</div><div style="margin-top:9px;display:flex;flex-direction:column;gap:5px">${specialist.site?`<a href="${specialist.site}" target="_blank" rel="noopener">Web oficial de la institución ↗</a>`:""}<a href="${specialist.source}" target="_blank" rel="noopener">Fuente oficial y oferta académica ↗</a></div></div>`;}
+ if(university){const items=university.careers.map(x=>`<li style="margin:4px 0">${esc(x)}</li>`).join("");return base+`<div style="margin-top:9px"><b>Profesorados y formación docente</b><ul style="padding-left:19px;margin:5px 0">${items}</ul><div class="small">Verificá en la facultad los requisitos de ingreso, la oferta y el plan vigente. Las titulaciones aún no confirmadas se indican como pendientes.</div><div style="margin-top:9px;display:flex;flex-direction:column;gap:5px"><a href="${university.site}" target="_blank" rel="noopener">Web oficial ↗</a><a href="${university.source}" target="_blank" rel="noopener">Carreras y oferta académica ↗</a></div></div>`;}
  return base+`<div style="margin-top:7px"><b>Formación</b>${esc(p[3])}</div><div class="small" style="margin-top:7px">Ubicación aproximada; oferta y sede pendientes de verificación cuando se indica.</div>`;
 }
 // Separar visualmente puntos exactamente coincidentes para que todos puedan seleccionarse.
